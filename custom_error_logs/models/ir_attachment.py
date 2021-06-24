@@ -1,16 +1,7 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+from odoo import api, models
 
-
-import base64
-import logging
-import os
-
-from odoo import api, fields, models, _
-from odoo.tools import config, human_size, ustr, html_escape
-
-
-_logger = logging.getLogger(__name__)
+from odoo.tools.parse_version import parse_version
 
 
 class IrAttachment(models.Model):
@@ -18,13 +9,22 @@ class IrAttachment(models.Model):
 
     @api.model
     def _file_read(self, fname, bin_size=False):
-        full_path = self._full_path(fname)
-        r = ''
-        try:
-            if bin_size:
-                r = human_size(os.path.getsize(full_path))
-            else:
-                r = base64.b64encode(open(full_path,'rb').read())
-        except (IOError, OSError):
-            pass
-        return r
+        self.env.cr.execute("""
+            SELECT latest_version 
+            FROM ir_module_module 
+            WHERE name = 'base';
+        """)
+        version = parse_version(self.env.cr.fetchone()[0])
+        if int(version[0]) < 14:
+            res = ''
+            try:
+                return super()._file_read(fname, bin_size)
+            except (IOError, OSError):
+                pass
+            return res
+        else:
+            try:
+                return super()._file_read(fname)
+            except (IOError, OSError):
+                pass
+            return b''

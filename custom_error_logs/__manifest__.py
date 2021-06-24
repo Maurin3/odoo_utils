@@ -1,6 +1,6 @@
 {
     'name': 'Custom Error Logs',
-    'version': '1.0.1',
+    'version': '1.0.2',
     'category': 'Tools',
     'summary': 'Custom Error Logs',
     'description': """
