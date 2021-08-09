@@ -13,4 +13,7 @@ Clone this repository and add the repository to the addons (`addons-path`) then 
 |Name                |Version|Summary                                                                                                            |
 |:------------------:|:-----:|:-----------------------------------------------------------------------------------------------------------------:|
 |custom_safe_eval    |1.0.2  |Rewrites the safe_eval to let (i)pdb, print function to be used in server actions, crons, automated actions, ...   |
-|custom_error_logs   |1.0.2  |Rewrites _file_read method of ir.attachment model to avoid the display of the traceback                            |
+
+**NB** : 
+
+* To remove the traceback of some missing file linked to ir.attachment model, you can add to your command line : `--log-handler odoo.addons.base.models.ir_attachment:WARNING`
